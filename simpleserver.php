@@ -6,26 +6,13 @@ $apiKey = '941d558c-76a3-4e0a-b90a-1c59c34623cd';
 if (isset($_REQUEST['action'])) {
 	session_start();
     switch ($_REQUEST['action']) {
-        case 'CreatePost':
-            getGameData();
-            break;
-		case 'Update':
-            updatePost();
-            break;
 		case 'getSummonerData':
             getSummonerData($_REQUEST['summonerName']);
             break;
+		case 'getRankedStatsData':
+            getRankedStatsData($_REQUEST['summonerId']);
+            break;
     }
-}
-
-function getGameData() {
-	$summonerName = 'skyman12';
- 
-	// get the basic summoner info
-	$result = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' . $summonerName . '?api_key=' . $GLOBALS['apiKey'];
-	$summoner = curl_get_contents($result);
-	// $summoner = json_decode(curl_get_contents($result))->$summonerName;
-	echo $summoner;
 }
 
 function getSummonerData($summonerName) {
@@ -33,6 +20,12 @@ function getSummonerData($summonerName) {
 	$result = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' . $summonerName . '?api_key=' . $GLOBALS['apiKey'];
 	$summoner = curl_get_contents($result);
 	echo $summoner;
+}
+
+function getRankedStatsData($summonerId) {
+	$result = 'https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/' . $summonerId . '/ranked?api_key=' . $GLOBALS['apiKey'];
+	$rankedStatsData = curl_get_contents($result);
+	echo $rankedStatsData;
 }
 
 function curl_get_contents($url)
