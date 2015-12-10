@@ -12,6 +12,9 @@ if (isset($_REQUEST['action'])) {
 		case 'Update':
             updatePost();
             break;
+		case 'getSummonerData':
+            getSummonerData($_REQUEST['summonerName']);
+            break;
     }
 }
 
@@ -25,8 +28,11 @@ function getGameData() {
 	echo $summoner;
 }
 
-function getSummonerData() {
-	
+function getSummonerData($summonerName) {
+	// get the basic summoner info
+	$result = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' . $summonerName . '?api_key=' . $GLOBALS['apiKey'];
+	$summoner = curl_get_contents($result);
+	echo $summoner;
 }
 
 function curl_get_contents($url)
