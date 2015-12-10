@@ -12,6 +12,9 @@ if (isset($_REQUEST['action'])) {
 		case 'getRankedStatsData':
             getRankedStatsData($_REQUEST['summonerId']);
             break;
+		case 'getChampionData':
+            getChampionData();
+            break;
     }
 }
 
@@ -26,6 +29,12 @@ function getRankedStatsData($summonerId) {
 	$result = 'https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/' . $summonerId . '/ranked?api_key=' . $GLOBALS['apiKey'];
 	$rankedStatsData = curl_get_contents($result);
 	echo $rankedStatsData;
+}
+
+function getChampionData() {
+	$result = 'https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion/?champData=all&api_key=' . $GLOBALS['apiKey'];
+	$championData = curl_get_contents($result);
+	echo $championData;
 }
 
 function curl_get_contents($url)
