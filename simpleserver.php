@@ -18,6 +18,9 @@ if (isset($_REQUEST['action'])) {
 		case 'getSummonerRank':
             getSummonerRank($_REQUEST['summonerId']);
             break;
+		case 'getChampionRoles':
+            getChampionRoles();
+            break;
     }
 }
 
@@ -45,6 +48,13 @@ function getChampionData() {
 	$result = 'https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion/?champData=all&api_key=' . $GLOBALS['apiKey'];
 	$championData = curl_get_contents($result);
 	echo $championData;
+}
+
+function getChampionRoles() {
+	// get the basic summoner info
+	$result = 'http://127.0.0.1:8081/LeagueOfLegendsServer/ChampionList.json';
+	$summoner = curl_get_contents($result);
+	echo $summoner;
 }
 
 function curl_get_contents($url)
