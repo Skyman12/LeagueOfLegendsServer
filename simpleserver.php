@@ -15,12 +15,22 @@ if (isset($_REQUEST['action'])) {
 		case 'getChampionData':
             getChampionData();
             break;
+		case 'getSummonerRank':
+            getSummonerRank($_REQUEST['summonerId']);
+            break;
     }
 }
 
 function getSummonerData($summonerName) {
 	// get the basic summoner info
 	$result = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' . $summonerName . '?api_key=' . $GLOBALS['apiKey'];
+	$summoner = curl_get_contents($result);
+	echo $summoner;
+}
+
+function getSummonerRank($summonerId) {
+	// get the basic summoner info
+	$result = 'https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/' . $summonerId . '?api_key=' . $GLOBALS['apiKey'];
 	$summoner = curl_get_contents($result);
 	echo $summoner;
 }
