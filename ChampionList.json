@@ -1,4 +1,4 @@
-{	"Aatrox" : ["Jungle" , "Top"],
+{"Aatrox" : ["Jungle" , "Top"],
 	"Ahri" : ["Mid"],
 	"Akali" : ["Mid" , "Top"],
 	"Alistar" : ["Support"],
@@ -125,5 +125,4 @@
 	"Zed" : ["Mid"],
 	"Ziggs" : ["Mid"],
 	"Zilean" : ["Support"],
-	"Zyra" : ["Mid" , "Support"]
-	}
+	"Zyra" : ["Mid" , "Support"]}

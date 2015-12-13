@@ -52,7 +52,8 @@ function getChampionData() {
 
 function getChampionRoles() {
 	// get the basic summoner info
-	$result = 'http://127.0.0.1:8081/LeagueOfLegendsServer/ChampionList.json';
+	//$result = 'http://127.0.0.1:8081/LeagueOfLegendsServer/ChampionList.json';
+	$result = 'http://lolteamarchitect.elasticbeanstalk.com/LeagueOfLegendsServer/ChampionList.json';
 	$summoner = curl_get_contents($result);
 	echo $summoner;
 }
