@@ -1,101 +1,73 @@
 <?php
 header("Access-Control-Allow-Origin: *");
+
+$apiKey = '941d558c-76a3-4e0a-b90a-1c59c34623cd';
+
 if (isset($_REQUEST['action'])) {
 	session_start();
     switch ($_REQUEST['action']) {
-		case 'getSteamAppIDs':
-            getSteamAppIDs();
+		case 'getSummonerData':
+            getSummonerData($_REQUEST['summonerName']);
             break;
-		case 'getSteamSaleInformation':
-			getSteamSaleInformation($_REQUEST['appid']);
-			break;
-		case 'getCurrentData':
-			getCurrentData();
-			break;
-		case 'putData':
-			putData($_REQUEST['data']);
-			break;
-		case 'buildSteamSaleInformation':
-			echo "here";
-			buildSteamSaleInformation();
-			break;
+		case 'getRankedStatsData':
+            getRankedStatsData($_REQUEST['summonerId']);
+            break;
+		case 'getChampionData':
+            getChampionData();
+            break;
+		case 'getSummonerRank':
+            getSummonerRank($_REQUEST['summonerId']);
+            break;
+		case 'getChampionRoles':
+            getChampionRoles();
+            break;
     }
 }
 
-function getSteamAppIDs() {
-	$result = 'https://api.steampowered.com/ISteamApps/GetAppList/v2';
-	$d = curl_get_contents($result);
-	echo $d;
+function getSummonerData($summonerName) {
+	// get the basic summoner info
+	$result = 'https://na.api.pvp.net/api/lol/na/v1.4/summoner/by-name/' . $summonerName . '?api_key=' . $GLOBALS['apiKey'];
+	$summoner = curl_get_contents($result);
+	echo $summoner;
 }
 
-function getSteamSaleInformation($appid) {
-	$result = 'http://store.steampowered.com/api/appdetails?appids=' . $appid . '&filters=price_overview';
-	$d = curl_get_contents($result);
-	echo $d;
+function getSummonerRank($summonerId) {
+	// get the basic summoner info
+	$result = 'https://na.api.pvp.net/api/lol/na/v2.5/league/by-summoner/' . $summonerId . '?api_key=' . $GLOBALS['apiKey'];
+	$summoner = curl_get_contents($result);
+	echo $summoner;
 }
 
-function getCurrentData() {
-	$result = 'http://localhost:8081/SteamSaleWatcherServer/gameList.json';
-	$d = curl_get_contents($result);
-	echo $d;
+function getRankedStatsData($summonerId) {
+	$result = 'https://na.api.pvp.net/api/lol/na/v1.3/stats/by-summoner/' . $summonerId . '/ranked?api_key=' . $GLOBALS['apiKey'];
+	$rankedStatsData = curl_get_contents($result);
+	echo $rankedStatsData;
 }
 
-function putData($data) {
-	file_put_contents('gameList.json', $data);
+function getChampionData() {
+	$result = 'https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion/?champData=all&api_key=' . $GLOBALS['apiKey'];
+	$championData = curl_get_contents($result);
+	echo $championData;
 }
 
-function buildSteamSaleInformation() {
-	echo "hi";
-	// Get all the games
-	$result = 'https://api.steampowered.com/ISteamApps/GetAppList/v2';
-	$d = curl_get_contents($result);
-	$appIDs = json_decode($d, true);
-	$array = $appIDs["applist"]["apps"];
-	
-	$steaminfo = array();
-	
-	foreach ($array as $map) {
-		// Get the data for each game
-		try {
-			$result = 'http://store.steampowered.com/api/appdetails?appids=' . $map["appid"] . '&filters=price_overview';
-			$d = curl_get_contents($result);
-			$data = json_decode($d, true);
-			var_dump($data);
-			// Make sure the data and keys are fine
-			if ($data != null 
-			&& array_key_exists ( $map["appid"] , $data) 
-			&& array_key_exists ( "data" , $data[$map["appid"]])
-			&& array_key_exists ( "price_overview" , $data[$map["appid"]]["data"])) {
-				$discountPrice = $data[$map["appid"]]["data"]["price_overview"]["discount_percent"];
-				$steaminfo[$map["name"]] = $discountPrice;
-			}
-		} catch (Exception $e) {
-			
-		}
-	}
-		
-	putData(json_encode($steaminfo));
-	echo "Compled this ish";
-	echo true;
+function getChampionRoles() {
+	// get the basic summoner info
+	$result = 'http://127.0.0.1:8081/LeagueOfLegendsServer/ChampionList.json';
+	$summoner = curl_get_contents($result);
+	echo $summoner;
 }
 
 function curl_get_contents($url)
 {
-  set_time_limit(0);
-  ini_set("max_execution_time", 0);
   $ch = curl_init($url);
   $ch = curl_init($url);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
   curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-  try {
-	  $data = curl_exec($ch);
-	  curl_close($ch);
-	  return $data;
-  } catch (Exception $e) {
-	  
-  }
-  return null;
+  $data = curl_exec($ch);
+  curl_close($ch);
+  return $data;
 }
+
 ?>
